@@ -1,0 +1,122 @@
+/* === Editor Container === */
+.editor-container {
+  flex: 1;
+  background-color: var(--editor-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 75%;
+}
+
+/* === Toolbar === */
+.editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--panel-bg);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  gap: 0.8rem 0.5rem;
+  /* flex-wrap: wrap; */
+}
+
+.editor-select {
+  flex: 1;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 0.8rem;
+
+  cursor: pointer;
+}
+
+.editor-select:disabled{
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text) !important;
+  cursor: not-allowed;
+}
+.copy-btn,
+.run-btn {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.copy-btn:hover{
+  background: var(--button-hover);
+}
+
+.run-btn:hover{
+background-color: var(--highlight-color);
+color: #111827;    
+}
+.run-btn:disabled {
+  background: var(--button-secondary-bg);
+  color: var(--subtext-color); 
+  cursor: not-allowed; 
+  opacity: 0.6; 
+  box-shadow: none; 
+  border: 1px solid var(--border-color); 
+}
+
+.run-btn:disabled:hover {
+  background: var(--button-secondary-bg);
+  color: var(--subtext-color);
+}
+/* === Editor Box === */
+.editor-box {
+  flex-grow: 1;
+  
+  height: 100%;
+  position: relative;
+}
+
+/* === Responsive Editor Toolbar === */
+@media (max-width: 900px) {
+  .editor-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem 10px;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+
+  .copy-btn,
+  .run-btn {
+    padding: 0.6rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .editor-box{
+    height: 320px;
+  }
+ 
+}
+/* === Ensure Monaco Editor Full Height === */
+.editor-box .monaco-editor,
+.editor-box .monaco-editor .overflow-guard,
+.editor-box .monaco-scrollable-element {
+  height: 100% !important;
+}

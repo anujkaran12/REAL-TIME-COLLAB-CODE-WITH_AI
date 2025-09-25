@@ -1,0 +1,188 @@
+import React, { useEffect, useState } from "react";
+import CodeEditor from "../../components/Editor/Editor";
+import Participants from "../../components/Participants/Participants";
+import AISuggestions from "../../components/AiSuggestions/AiSuggestions";
+import Output from "../../components/Output/Output";
+
+import "./Dashboard.css";
+import { API } from "../../api";
+import { CODE_SNIPPETS, ILanguagesVersion, LANGUAGE_VERSIONS } from "../../constants";
+import { usePopup } from "../../context/popupContext";
+
+import {useNavigate, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import Loading from "../../components/Utility/Loading/Loading";
+import NotLoggedIn from "../../components/Utility/NotLoggedIn/NotLoggedIn";
+import { useSocket } from "../../context/socketContext";
+import SessionOver from "../../components/Utility/SessionOver/SessionOver";
+import RoomHeader from "../../components/RoomHeader/RoomHeader";
+
+const Dashboard: React.FC = () => {
+  const { showPopup } = usePopup();
+  const socket = useSocket();
+  const [output, setOutput] = useState<any>({});
+  const [outputLoading, setOutputLoading] = useState<boolean>(false);
+  const [existsRoom, setExistsRoom] = useState<boolean | null>(null);
+
+  const [searchParams] = useSearchParams();
+  const roomID = searchParams.get("ID");
+  const roomPassword = searchParams.get("pass");
+ const [code, setCode] = useState<string>(CODE_SNIPPETS['javascript']);
+
+  const navigate = useNavigate();
+
+  const {
+    userData,
+    loading: userLoading,
+    error: userError,
+  } = useSelector((state: RootState) => state.User);
+
+  const [participantData, setParticipantData] = useState([]);
+  const [roomData, setRoomData] = useState({
+    roomTitle: "",
+    roomPassword: "",
+    hostSocketId: "",
+  });
+  // Socket join-room effect
+
+  useEffect(() => {
+    console.log("useEffect");
+
+    if (!socket) {
+      return;
+    }
+
+    if (!roomID || !roomPassword) {
+      console.log("RD RP Not found");
+      setExistsRoom(false);
+      return;
+    }
+    if (socket.disconnected) {
+      socket?.on("connect", () => {
+        console.log("Connected to server: room-page ", socket?.id);
+      });
+    }
+
+    socket.on("participant-left", ({ msg, socketID, data, type }) => {
+      console.log(data);
+      setParticipantData(data.participants);
+      showPopup(msg, type);
+    });
+
+    socket.on("end-session", ({ msg, type }) => {
+      showPopup(msg, type);
+      setExistsRoom(false);
+      setParticipantData([]);
+      setRoomData({ roomTitle: "", roomPassword: "", hostSocketId: "" });
+    });
+
+    socket.on("user-joined", ({ msg, type, data }) => {
+      showPopup(msg, type);
+      setParticipantData(data.participants);
+      console.log(data);
+    });
+
+    socket.emit("join-room", { roomID, roomPassword, userData });
+
+    socket.on("join-room-success", ({ msg, type, data }) => {
+      setExistsRoom(true);
+      setParticipantData(data.participants);
+      showPopup(msg, type);
+      setRoomData({
+        roomTitle: data.roomTitle,
+        roomPassword: data.roomPassword,
+        hostSocketId: data.hostSocketId,
+      });
+      // console.log(data);
+    });
+    socket.on("join-room-error", ({ msg, type }) => {
+      setExistsRoom(false);
+      showPopup(msg, type);
+    });
+
+    socket.on("disconnect", () => console.log("Disconnected from server ROOM"));
+
+    const handleBeforeUnload = () => {
+      if (socket) {
+        socket.emit("leave-room", { roomID, userData: userData });
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+
+      socket.emit("leave-room", { roomID, userData: userData });
+      socket.off("join-room-success");
+      socket.off("join-room-error");
+      socket.off("user-joined");
+      socket.off("participant-left");
+      socket.off("end-session")
+    };
+  }, [socket, roomID, roomPassword, userData]);
+
+  
+  // Method to execute code
+  const executeCode = async (language: string, sourceCode: string) => {
+    try {
+      setOutputLoading(true);
+      const { data } = await API.post("/execute", {
+        language,
+        version: LANGUAGE_VERSIONS[language as keyof ILanguagesVersion],
+        files: [{ content: sourceCode }],
+      });
+      setOutput(data);
+      return data;
+    } catch (error) {
+      showPopup("Network error", "ERROR");
+    } finally {
+      setOutputLoading(false);
+    }
+  };
+
+  // Conditional rendering
+  
+  if (!userData) return <NotLoggedIn />;
+  if (userLoading) {
+    console.log("User loading");
+    return <Loading />;
+  }
+  if (existsRoom === false) return <SessionOver />;
+  if (existsRoom === null) {
+    console.log("exists loading");
+    return <Loading />;
+  }
+
+  return (
+    <>
+      <RoomHeader
+        title={roomData.roomTitle}
+        password={roomData.roomPassword}
+        onLeave={() =>{
+           navigate('/')
+           window.location.reload();
+          }}
+        roomID={roomID || ""}
+        hostSocketId={roomData.hostSocketId}
+      />
+      <div className="dashboard-container">
+        <section className="editor-section">
+          <CodeEditor executeCode={executeCode} outputLoading={outputLoading} hostSocketId={roomData.hostSocketId} code={code} setCode={setCode}/>
+          <Output output={output} outputLoading={outputLoading} />
+        </section>
+
+        <aside className="sidebar">
+          <Participants
+            participantsData={participantData}
+            hostSocketId={roomData.hostSocketId}
+          />
+          <AISuggestions code={code} setCode={setCode}/>
+        </aside>
+      </div>
+    </>
+  );
+};
+
+export default Dashboard;

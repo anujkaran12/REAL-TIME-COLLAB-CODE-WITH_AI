@@ -1,0 +1,119 @@
+/* Container */
+.pnf-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  
+  color: var(--text-color);
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Card Content */
+.pnf-content {
+  max-width: 500px;
+  width: 100%;
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: var(--panel-bg);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pnf-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+/* Icon on top */
+.pnf-icon {
+  font-size: 2rem;
+  color: var(--error-color);
+  margin-bottom: 1rem;
+}
+
+/* 404 Code */
+.pnf-code {
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 0;
+  color: var(--error-color);
+  line-height: 1;
+}
+
+.pnf-title {
+  font-size: 1.4rem;
+  margin: 1rem 0;
+  color: var(--header-text);
+}
+
+.pnf-text {
+  font-size: 1rem;
+  color: var(--subtext-color);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+/* Button */
+.pnf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  font-size: .9rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pnf-button:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+
+
+.dark .pnf-content {
+  background-color: var(--panel-bg);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.dark .pnf-button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+}
+
+.dark .pnf-button:hover {
+  background-color: var(--button-hover);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pnf-icon {
+    font-size: 1.5rem;
+  }
+
+  .pnf-code {
+    font-size: 2.5rem;
+  }
+
+  .pnf-title {
+    font-size: 1rem;
+  }
+
+  .pnf-text {
+    font-size: .8rem;
+  }
+
+  .pnf-button {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.8rem;
+  }
+}

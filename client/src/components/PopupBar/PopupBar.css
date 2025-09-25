@@ -1,0 +1,113 @@
+/* Container to hold all popups stacked */
+.popup-container {
+  position: fixed;
+  bottom: 20px;
+  /* top: 50%; */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;  /* space between popups */
+  z-index: 99999;
+  width: 350px;
+  max-width: 100%;
+  align-items: center;
+  transition: all .5s linear;
+}
+
+/* Popup Bar Styles */
+.popup-bar {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+  transition: all 0.4s ease-in-out;
+  color: var(--text-color);
+  animation: slideIn 0.4s forwards;
+  z-index: inherit;
+}
+
+/* Popup Variants */
+.popup-bar.info {
+  background: var(--info-color);
+}
+
+.popup-bar.success {
+  background: var(--success-color);
+}
+
+.popup-bar.error {
+  background: var(--error-color);
+}
+
+.popup-bar.warning {
+  background: var(--warning-color);
+  /* color: #111827; dark text for contrast */
+}
+
+.popup-bar i {
+  opacity: 0.85;
+  font-size: 1.1rem;
+}
+.slide-in {
+  animation: slideIn 0.4s forwards;
+}
+
+.slide-out {
+  animation: slideOut 0.4s forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(100%); opacity: 0; }
+}
+
+
+/* Animations */
+/* @keyframes slideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+} */
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .popup-container {
+    width: 100%;
+    /* left: 0;
+    transform: none;
+    align-items: center; */
+  }
+
+  .popup-bar {
+    width: 90%;
+  }
+}
