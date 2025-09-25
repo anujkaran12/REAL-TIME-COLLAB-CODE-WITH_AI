@@ -14,7 +14,8 @@ const Home: React.FC = () => {
           <h1 className="hero-title">
             <span>CODE SYNC</span>
             <br />
-            Collaborate in Real-Time <br />Code Together <br /> Talk Instantly
+            Collaborate in Real-Time <br />
+            Code Together <br /> Talk Instantly
           </h1>
 
           {/* Hero Features */}
@@ -73,15 +74,8 @@ const Home: React.FC = () => {
 
         <div className="hero-right">
           <div className="hero-right-img">
-            <img src={editorImg} alt="AI Coding Preview" />
+            <img src={editorImg} alt="AI Coding Preview" loading="lazy" />
           </div>
-        </div>
-
-        <div className="hero-shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-          <div className="shape shape-4"></div>
         </div>
       </section>
 

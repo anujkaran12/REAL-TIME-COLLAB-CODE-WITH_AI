@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loading from "./components/Utility/Loading/Loading";
 
@@ -12,7 +12,7 @@ const PageNotFound = lazy(() => import("./components/Utility/PageNotFound/PageNo
 
 function App() {
   return (
-    <BrowserRouter>
+    
       <Suspense fallback={<Loading/>}>
         <Navbar />
         <Routes>
@@ -23,7 +23,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
-    </BrowserRouter>
+    
   );
 }
 
