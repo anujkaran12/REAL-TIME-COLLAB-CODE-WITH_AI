@@ -12,13 +12,13 @@ import { set } from "mongoose";
 dotenv.config();
 //connect to the mongoDB
 const app: Application = express();
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080;
+const PORT = process.env.PORT;
 
 // Middleware
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", process.env.FRONTEND_URL as string],
+    origin: process.env.FRONTEND_URL as string,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -236,7 +236,6 @@ io.on("connection", (socket) => {
 
   socket.on("audioStream", (roomId, audioData) => {
     const room = rooms.get(roomId);
-    
 
     socket.broadcast.emit("audioStream", audioData);
   });
