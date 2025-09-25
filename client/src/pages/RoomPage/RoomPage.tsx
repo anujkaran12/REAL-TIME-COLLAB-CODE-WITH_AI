@@ -76,7 +76,7 @@ const RoomPage: React.FC = () => {
             handleCreateRoom={handleCreateRoom}
             handleJoinRoom={handleJoinRoom}
             btnLoading={btnLoading}
-            setBtnLoading={setButtonLoading}
+            
           />
         </div>
       )}
