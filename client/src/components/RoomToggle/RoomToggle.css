@@ -77,14 +77,14 @@
   right: 10px;
 }
 .form input {
-  padding: 10px;
+  padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
   background: var(--bg-color);
   color: var(--text-color);
   width: 100%;
   margin-top: 1rem;
-  font-size: 1rem;
+  font-size: .9rem;
   
   outline:0
 }
@@ -132,8 +132,8 @@
 
   .form
   .form input {
-    padding: 8px;
-    font-size: .9rem;
+    padding: 9px;
+    font-size: .95rem;
   }
 
   .form button {

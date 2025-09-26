@@ -6,10 +6,14 @@ import Output from "../../components/Output/Output";
 
 import "./Dashboard.css";
 import { API } from "../../api";
-import { CODE_SNIPPETS, ILanguagesVersion, LANGUAGE_VERSIONS } from "../../constants";
+import {
+  CODE_SNIPPETS,
+  ILanguagesVersion,
+  LANGUAGE_VERSIONS,
+} from "../../constants";
 import { usePopup } from "../../context/popupContext";
 
-import {useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Loading from "../../components/Utility/Loading/Loading";
@@ -28,7 +32,7 @@ const Dashboard: React.FC = () => {
   const [searchParams] = useSearchParams();
   const roomID = searchParams.get("ID");
   const roomPassword = searchParams.get("pass");
- const [code, setCode] = useState<string>(CODE_SNIPPETS['javascript']);
+  const [code, setCode] = useState<string>(CODE_SNIPPETS["javascript"]);
 
   const navigate = useNavigate();
 
@@ -119,11 +123,10 @@ const Dashboard: React.FC = () => {
       socket.off("join-room-error");
       socket.off("user-joined");
       socket.off("participant-left");
-      socket.off("end-session")
+      socket.off("end-session");
     };
   }, [socket, roomID, roomPassword, userData]);
 
-  
   // Method to execute code
   const executeCode = async (language: string, sourceCode: string) => {
     try {
@@ -143,7 +146,7 @@ const Dashboard: React.FC = () => {
   };
 
   // Conditional rendering
-  
+
   if (!userData) return <NotLoggedIn />;
   if (userLoading) {
     console.log("User loading");
@@ -160,16 +163,26 @@ const Dashboard: React.FC = () => {
       <RoomHeader
         title={roomData.roomTitle}
         password={roomData.roomPassword}
-        onLeave={() =>{
-           navigate('/')
-           window.location.reload();
-          }}
+        onLeave={() => {
+          if (roomData.hostSocketId === socket?.id) {
+            navigate("/");
+            window.location.reload();
+            return
+          }
+          navigate("/");
+        }}
         roomID={roomID || ""}
         hostSocketId={roomData.hostSocketId}
       />
       <div className="dashboard-container">
         <section className="editor-section">
-          <CodeEditor executeCode={executeCode} outputLoading={outputLoading} hostSocketId={roomData.hostSocketId} code={code} setCode={setCode}/>
+          <CodeEditor
+            executeCode={executeCode}
+            outputLoading={outputLoading}
+            hostSocketId={roomData.hostSocketId}
+            code={code}
+            setCode={setCode}
+          />
           <Output output={output} outputLoading={outputLoading} />
         </section>
 
@@ -178,7 +191,7 @@ const Dashboard: React.FC = () => {
             participantsData={participantData}
             hostSocketId={roomData.hostSocketId}
           />
-          <AISuggestions code={code} setCode={setCode}/>
+          <AISuggestions code={code} setCode={setCode} />
         </aside>
       </div>
     </>

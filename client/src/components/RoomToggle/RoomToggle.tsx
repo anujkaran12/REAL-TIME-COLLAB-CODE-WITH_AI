@@ -60,7 +60,7 @@ const RoomToggle: React.FC<IRommTogglePROP> = ({
               onChange={(e) => setRoomID(e.target.value)}
               minLength={5}
             />
-            <div style={{position:'relative'}}>
+            <div style={{ position: "relative" }}>
               <input
                 className="input-letter-space"
                 type={passwordType}
@@ -69,7 +69,12 @@ const RoomToggle: React.FC<IRommTogglePROP> = ({
                 onChange={(e) => setRoomPassword(e.target.value)}
                 maxLength={5}
               />
-             
+
+              {passwordType === "password" ? (
+                <i className="bi bi-eye" onClick={passwordToggle}></i>
+              ) : (
+                <i className="bi bi-eye-slash" onClick={passwordToggle}></i>
+              )}
             </div>
             <button
               onClick={() => {
@@ -100,7 +105,7 @@ const RoomToggle: React.FC<IRommTogglePROP> = ({
               onChange={(e) => setRoomTitle(e.target.value)}
               required
             />
-            <div style={{position:'relative'}}>
+            <div style={{ position: "relative" }}>
               <input
                 className="input-letter-space"
                 type={passwordType}
@@ -109,7 +114,7 @@ const RoomToggle: React.FC<IRommTogglePROP> = ({
                 onChange={(e) => setRoomPassword(e.target.value)}
                 required
               />
-               {passwordType === "password" ? (
+              {passwordType === "password" ? (
                 <i className="bi bi-eye" onClick={passwordToggle}></i>
               ) : (
                 <i className="bi bi-eye-slash" onClick={passwordToggle}></i>
@@ -126,7 +131,7 @@ const RoomToggle: React.FC<IRommTogglePROP> = ({
                   showPopup("Password Required", "WARNING");
                   return;
                 }
-                handleCreateRoom(roomTitle,roomPassword);
+                handleCreateRoom(roomTitle, roomPassword);
               }}
               disabled={btnLoading}
             >

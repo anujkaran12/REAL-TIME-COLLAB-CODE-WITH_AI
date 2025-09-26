@@ -2,10 +2,12 @@ import editorImg from "../../assets/editor.png";
 import React from "react";
 import "./Home.css";
 import { useAuth } from "../../context/authContext";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const Home: React.FC = () => {
   const { setOpenAuthFormType } = useAuth();
-
+  const { userData } = useSelector((state: RootState) => state.User);
   return (
     <div className="home-container">
       {/* Hero Section */}
@@ -56,19 +58,33 @@ const Home: React.FC = () => {
           </div>
 
           {/* Call-to-Action */}
+
           <div className="hero-buttons">
-            <button
-              className="btn primary"
-              onClick={() => setOpenAuthFormType("REGISTER")}
-            >
-              Get Started
-            </button>
-            <button
-              className="btn secondary"
-              onClick={() => setOpenAuthFormType("LOGIN")}
-            >
-              Sign In
-            </button>
+            {!userData ? (
+              <>
+                <button
+                  className="btn primary"
+                  onClick={() => setOpenAuthFormType("REGISTER")}
+                >
+                  Get Started
+                </button>
+                <button
+                  className="btn secondary"
+                  onClick={() => setOpenAuthFormType("LOGIN")}
+                >
+                  Sign In
+                </button>
+              </>
+            ) : (
+              
+                <button
+                  className="btn primary"
+                  onClick={() => setOpenAuthFormType("LOGIN")}
+                >
+                  Join | Create Room
+                </button>
+              
+            )}
           </div>
         </div>
 
