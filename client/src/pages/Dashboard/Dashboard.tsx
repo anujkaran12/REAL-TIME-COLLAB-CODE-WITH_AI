@@ -117,8 +117,10 @@ const Dashboard: React.FC = () => {
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-
-      socket.emit("leave-room", { roomID, userData: userData });
+      if (socket) {
+        socket.emit("leave-room", { roomID, userData: userData });
+        // socket.disconnect(); // <--- 🔥 ensures we fully disconnect
+      }
       socket.off("join-room-success");
       socket.off("join-room-error");
       socket.off("user-joined");
@@ -147,11 +149,11 @@ const Dashboard: React.FC = () => {
 
   // Conditional rendering
 
-  if (!userData) return <NotLoggedIn />;
   if (userLoading) {
     console.log("User loading");
     return <Loading />;
   }
+  if (!userData) return <NotLoggedIn />;
   if (existsRoom === false) return <SessionOver />;
   if (existsRoom === null) {
     console.log("exists loading");
@@ -164,10 +166,11 @@ const Dashboard: React.FC = () => {
         title={roomData.roomTitle}
         password={roomData.roomPassword}
         onLeave={() => {
+          
           if (roomData.hostSocketId === socket?.id) {
             navigate("/");
             window.location.reload();
-            return
+            return;
           }
           navigate("/");
         }}

@@ -19,7 +19,7 @@ const Home: React.FC = () => {
             <span>CODE SYNC</span>
             <br />
             Collaborate in Real-Time <br />
-            Code Together <br /> Talk Instantly
+            Code Together <br /> AI Suggesstion
           </h1>
 
           {/* Hero Features */}
