@@ -4,10 +4,12 @@ import "./Home.css";
 import { useAuth } from "../../context/authContext";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
   const { setOpenAuthFormType } = useAuth();
   const { userData } = useSelector((state: RootState) => state.User);
+  const navigate = useNavigate()
   return (
     <div className="home-container">
       {/* Hero Section */}
@@ -79,7 +81,7 @@ const Home: React.FC = () => {
               
                 <button
                   className="btn primary"
-                  onClick={() => setOpenAuthFormType("LOGIN")}
+                  onClick={() => navigate('/Dashboard')}
                 >
                   Join | Create Room
                 </button>
