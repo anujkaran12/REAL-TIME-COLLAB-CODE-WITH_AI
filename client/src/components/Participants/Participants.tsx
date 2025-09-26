@@ -56,7 +56,7 @@ const Participants: React.FC<Iprop> = ({ participantsData, hostSocketId }) => {
             if (mediaRecorderRef.current?.state === "recording") {
               mediaRecorderRef.current.stop();
             }
-          }, 400);
+          }, 1000);
         }
       });
 
@@ -100,10 +100,11 @@ const Participants: React.FC<Iprop> = ({ participantsData, hostSocketId }) => {
       }
       audio.play().catch((error) => console.error("Error playing audio:", error));
     });
+    window.addEventListener("beforeunload", stopRecording);
 
     return () => {
       socket?.off("audioStream");
-      stopRecording(); // Clean up on component unmount
+      window.addEventListener("beforeunload", stopRecording);
     };
   }, [socket]);
 
