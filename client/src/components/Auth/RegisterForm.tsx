@@ -5,6 +5,7 @@ import { useAuth } from "../../context/authContext";
 import { usePopup } from "../../context/popupContext";
 import axios from "axios";
 import ButtonLoader from "../Utility/ButtonLoader/ButtonLoader";
+import VerifyCode from "./VerifyCode";
 
 const RegisterForm: React.FC = () => {
   const { setOpenAuthFormType } = useAuth();
@@ -17,9 +18,9 @@ const RegisterForm: React.FC = () => {
   });
   const [passwordType, setPasswordType] = useState("password");
 
+  const [verificationCode, setVerificationCode] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  
   const { showPopup } = usePopup();
   const passwordToggle = () => {
     if (passwordType === "text") {
@@ -57,6 +58,31 @@ const RegisterForm: React.FC = () => {
     setLoading(true);
     try {
       const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/auth/send-verification-code`,
+        { email: formData.email }
+      );
+
+      showPopup(res.data.msg, res.data.type);
+      setVerificationCode(res.data.verificationCode)
+    } catch (error: any) {
+      showPopup(
+        error.response?.data.msg || "Network error",
+        error.response?.data.type || "ERROR"
+      );
+    }
+    setLoading(false);
+  };
+
+
+
+
+  const onVerifyCode = async (formVerificationCode: string) => {
+    if (formVerificationCode !== verificationCode) {
+      return showPopup("Verification code not match.", "ERROR");
+    }
+    setLoading(true);
+    try {
+      const res = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`,
         formData
       );
@@ -70,8 +96,8 @@ const RegisterForm: React.FC = () => {
         confirmPassword: "",
         gender: "",
       });
-      showPopup("Registered Successfully", "SUCCESS");
-      setOpenAuthFormType('LOGIN')
+      
+      setOpenAuthFormType("LOGIN");
     } catch (error: any) {
       showPopup(
         error.response?.data.msg || "Network error",
@@ -80,150 +106,159 @@ const RegisterForm: React.FC = () => {
     }
     setLoading(false);
   };
-
-  const handleGoogleSignup = () => {
-    console.log("Sign up with Google clicked");
-    // Add Google OAuth logic
-  };
-
   return (
-    <div className="auth-form-container" onClick={(e) => e.stopPropagation()}>
-      <h2 className="auth-form-title">Create An Account</h2>
+    <>
+      {verificationCode ? (
+        <VerifyCode loading={loading} onVerifyCode={onVerifyCode} setVerificationCode={setVerificationCode}/>
+      ) : (
+        <div
+          className="auth-form-container"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2 className="auth-form-title">Create An Account</h2>
 
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <div className="auth-form-group">
-          <input
-            className="auth-form-input"
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            disabled={loading}
-            autoComplete={'name'}
-          />
-          {errors.name && (
-            <p className="auth-form-helper auth-form-error">{errors.name}</p>
-          )}
-        </div>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="auth-form-group">
+              <input
+                className="auth-form-input"
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                autoComplete={"name"}
+              />
+              {errors.name && (
+                <p className="auth-form-helper auth-form-error">
+                  {errors.name}
+                </p>
+              )}
+            </div>
 
-        <div className="auth-form-group">
-          <input
-            className="auth-form-input"
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            disabled={loading}
-            autoComplete={'email'}
-          />
-          {errors.email && (
-            <p className="auth-form-helper auth-form-error">{errors.email}</p>
-          )}
-        </div>
+            <div className="auth-form-group">
+              <input
+                className="auth-form-input"
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                autoComplete={"email"}
+              />
+              {errors.email && (
+                <p className="auth-form-helper auth-form-error">
+                  {errors.email}
+                </p>
+              )}
+            </div>
 
-        <div className="auth-form-group">
-          <input
-            className="auth-form-input"
-            type={passwordType}
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            disabled={loading}
-            autoComplete={'current-password'}
-          />
-          <p className="auth-form-helper">Minimum 6 characters</p>
-          {errors.password && (
-            <p className="auth-form-helper auth-form-error">
-              {errors.password}
-            </p>
-          )}
-          {passwordType === "password" ? (
-            <i className="bi bi-eye" onClick={passwordToggle}></i>
-          ) : (
-            <i className="bi bi-eye-slash" onClick={passwordToggle}></i>
-          )}
-        </div>
+            <div className="auth-form-group">
+              <input
+                className="auth-form-input"
+                type={passwordType}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                autoComplete={"current-password"}
+              />
+              <p className="auth-form-helper">Minimum 6 characters</p>
+              {errors.password && (
+                <p className="auth-form-helper auth-form-error">
+                  {errors.password}
+                </p>
+              )}
+              {passwordType === "password" ? (
+                <i className="bi bi-eye" onClick={passwordToggle}></i>
+              ) : (
+                <i className="bi bi-eye-slash" onClick={passwordToggle}></i>
+              )}
+            </div>
 
-        <div className="auth-form-group">
-          <input
-            className="auth-form-input"
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-            disabled={loading}
-            autoComplete={'current-password'}
-          />
-          {errors.confirmPassword && (
-            <p className="auth-form-helper auth-form-error">
-              {errors.confirmPassword}
-            </p>
-          )}
-        </div>
-        <div className="auth-form-group">
-          <div className="custom-select-wrapper">
-            <select
-              className="auth-form-input custom-select"
-              name="gender"
-              value={formData.gender}
-              onChange={(e) =>
-                setFormData({ ...formData, gender: e.target.value })
-              }
-              required
+            <div className="auth-form-group">
+              <input
+                className="auth-form-input"
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                autoComplete={"current-password"}
+              />
+              {errors.confirmPassword && (
+                <p className="auth-form-helper auth-form-error">
+                  {errors.confirmPassword}
+                </p>
+              )}
+            </div>
+            <div className="auth-form-group">
+              <div className="custom-select-wrapper">
+                <select
+                  className="auth-form-input custom-select"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={(e) =>
+                    setFormData({ ...formData, gender: e.target.value })
+                  }
+                  required
+                  disabled={loading}
+                >
+                  <option value="" disabled>
+                    Select Gender
+                  </option>
+                  <option value="male" disabled={loading}>
+                    Male
+                  </option>
+                  <option value="female" disabled={loading}>
+                    Female
+                  </option>
+                  <option value="other" disabled={loading}>
+                    Other
+                  </option>
+                </select>
+              </div>
+              {errors.gender && (
+                <p className="auth-form-helper auth-form-error">
+                  {errors.gender}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="form-btn auth-form-button"
               disabled={loading}
             >
-              <option value="" disabled>
-                Select Gender
-              </option>
-              <option value="male" disabled={loading}>
-                Male
-              </option>
-              <option value="female" disabled={loading}>
-                Female
-              </option>
-              <option value="other" disabled={loading}>
-                Other
-              </option>
-            </select>
-          </div>
-          {errors.gender && (
-            <p className="auth-form-helper auth-form-error">{errors.gender}</p>
-          )}
-        </div>
+              {loading ? <ButtonLoader /> : "Continue"}
+            </button>
+          </form>
 
-        <button
-          type="submit"
-          className="form-btn auth-form-button"
-          disabled={loading}
-        >
-          {loading ? <ButtonLoader/> : "Continue"}
-        </button>
-      </form>
-
-      {/* <button
+          {/* <button
         className="auth-form-button google-button"
         onClick={handleGoogleSignup}
         disabled={loading}
       >
         Sign up with Google
       </button> */}
-      <p className="auth-form-signin-text">
-        Already have an account?{" "}
-        <span onClick={() => setOpenAuthFormType("LOGIN")}>Sign in</span>
-      </p>
-      <i
-        className="bi bi-x-lg  cancelIcon"
-        onClick={() => setOpenAuthFormType(null)}
-      ></i>
-    </div>
+          <p className="auth-form-signin-text">
+            Already have an account?{" "}
+            <span onClick={() => setOpenAuthFormType("LOGIN")}>Sign in</span>
+          </p>
+          <i
+            className="bi bi-x-lg  cancelIcon"
+            onClick={() => setOpenAuthFormType(null)}
+          ></i>
+        </div>
+      )}
+    </>
   );
 };
 
