@@ -12,25 +12,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadCloudinary = void 0;
-const cloudinary_1 = require("cloudinary");
+exports.sendMail = void 0;
+// const nodemailer = require("nodemailer");
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.configDotenv();
-cloudinary_1.v2.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+const transporter = nodemailer_1.default.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS, // App Password
+    },
 });
-const uploadCloudinary = (avatarUrl) => __awaiter(void 0, void 0, void 0, function* () {
+const sendMail = (to, subject, html) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield cloudinary_1.v2.uploader.upload(avatarUrl, {
-            folder: "avatars",
-        });
-        return result;
+        const mailOptions = {
+            from: `Code Sync <${process.env.GMAIL_USER}>`,
+            to,
+            subject,
+            html,
+        };
+        return yield transporter.sendMail(mailOptions);
     }
     catch (error) {
         console.log(error);
-        return null;
     }
 });
-exports.uploadCloudinary = uploadCloudinary;
+exports.sendMail = sendMail;

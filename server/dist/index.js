@@ -190,11 +190,6 @@ io.on("connection", (socket) => {
         }
         socket.to(roomID).emit("code-update", { updatedCode, editorName });
     });
-    /*************************************** Listining on audio channel *****************************************/
-    socket.on("audioStream", (roomId, audioData) => {
-        const room = rooms.get(roomId);
-        socket.broadcast.emit("audioStream", audioData);
-    });
     /*************************************** Listining on disconnect *****************************************/
     socket.on("disconnect", (roomID) => {
         // if(socket.id ==)
