@@ -17,9 +17,9 @@ const cloudinary_1 = require("cloudinary");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 cloudinary_1.v2.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: "dpnk0pqxd",
+    api_key: "494536979267618",
+    api_secret: "VoJl5D93SrCYWdMFS0Gwi-xUzd0",
 });
 const uploadCloudinary = (avatarUrl) => __awaiter(void 0, void 0, void 0, function* () {
     try {

@@ -5,15 +5,15 @@ dotenv.config()
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS, // App Password
+    user: "anujkaran420@gmail.com",
+    pass: "ovia lipk kmav ltgl", // App Password
   },
 });
 
 export const sendMail = async (to: string, subject: string, html: string) => {
   try {
     const mailOptions = {
-      from: `Code Sync <${process.env.GMAIL_USER}>`,
+      from: `Code Sync <anujkaran420@gmail.com>`,
       to,
       subject,
       html,
