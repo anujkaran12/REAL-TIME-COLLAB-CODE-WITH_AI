@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
             </button>
             {/* // User is logged in: show avatar + name */}
             <div className="user-profile auth-btn" title="profile">
-              {userData?.avatar.secure_url ? (
+              {userData?.avatar?.secure_url ? (
                 <img
                   src={userData?.avatar?.secure_url}
                   alt="User Avatar"
