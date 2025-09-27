@@ -13,35 +13,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMail = void 0;
+// const nodemailer = require("nodemailer");
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const node_fetch_1 = __importDefault(require("node-fetch")); // Node 18+ me native fetch hai, old Node me install karna padega
+const transporter = nodemailer_1.default.createTransport({
+    service: "gmail",
+    auth: {
+        user: "anujkaran420@gmail.com",
+        pass: "ufip hcat udun xffd", // App Password
+    },
+});
 const sendMail = (to, subject, html) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield (0, node_fetch_1.default)('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer re_E4Xmnvov_2XQoBjj5TodYKQwUD3E2ri6o`, // apna API key .env me rakho
-            },
-            body: JSON.stringify({
-                from: 'Code Sync <anujkaran420@gmail.com>', // apna verified email
-                to,
-                subject,
-                html,
-            }),
-        });
-        const data = yield response.json();
-        if (!response.ok) {
-            console.error('Error sending mail:', data);
-            return null;
-        }
-        console.log('Mail sent:', data);
-        return data;
+        const mailOptions = {
+            from: `Code Sync <anujkaran420@gmail.com>`,
+            to,
+            subject,
+            html,
+        };
+        return yield transporter.sendMail(mailOptions);
     }
     catch (error) {
-        console.error('Error sending mail:', error);
-        return null;
+        console.log(error);
     }
 });
 exports.sendMail = sendMail;
