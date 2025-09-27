@@ -173,9 +173,39 @@ io.on("connection", (socket) => {
             msg: `You have left the session "${room.roomTitle}`,
             type: "SUCCESS",
         });
+        socket.leave(roomID);
         // Optional: delete room if empty
         if (room.participants.length === 0) {
             rooms.delete(roomID);
+        }
+    });
+    /***************************************** Remove participant from room **************************************/
+    socket.on("remove-participant", ({ roomId, participantSocketId }) => {
+        const room = rooms.get(roomId);
+        if (!room) {
+            socket.emit("join-room-error", {
+                msg: "Room does not exist",
+                type: "ERROR",
+            });
+            return;
+        }
+        const participantData = room.participants.filter((p) => p.socketID === participantSocketId);
+        room.participants = room.participants.filter((p) => p.socketID !== participantSocketId);
+        io.to(roomId).emit("participant-removed", {
+            msg: `${participantData[0].userData.name} removed by the host`,
+            data: rooms.get(roomId),
+            type: "WARNING",
+        });
+        // / Get the actual participant socket
+        const participantSocket = io.sockets.sockets.get(participantSocketId);
+        if (participantSocket) {
+            // Remove participant from the room
+            participantSocket.leave(roomId);
+            // Notify the participant themselves
+            participantSocket.emit("removed-from-room", {
+                msg: `You were removed from "${room.roomTitle}" by the host`,
+                type: "ERROR",
+            });
         }
     });
     /*************************************** Listining on code update *****************************************/

@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendVerificationCode = exports.loginUser = exports.registerUser = void 0;
 const userModel_1 = require("../models/userModel");
-const cloudinaryUpload_1 = require("../utils/cloudinaryUpload");
 const hashAndCompare_1 = require("../utils/hashAndCompare");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const sendMail_1 = require("../utils/sendMail");
@@ -45,17 +44,22 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 type: "WARNING",
             });
         }
-        const avatar = yield (0, cloudinaryUpload_1.uploadCloudinary)(`https://avatar.iran.liara.run/public/${gender.toUpperCase() === "MALE" ? "boy" : "girl"}?username=${email.split("@")[0]}`);
+        // const avatar = await uploadCloudinary(
+        //   `https://avatar.iran.liara.run/public/${
+        //     gender.toUpperCase() === "MALE" ? "boy" : "girl"
+        //   }?username=${email.split("@")[0]}`
+        // );
         // return;
         const hashPassword = yield (0, hashAndCompare_1.hashString)(password.toString());
         const user = yield userModel_1.userModel.create({
             name: name,
             email: email,
             password: hashPassword,
-            avatar: {
-                secure_url: avatar === null || avatar === void 0 ? void 0 : avatar.secure_url,
-                public_id: avatar === null || avatar === void 0 ? void 0 : avatar.public_id,
-            },
+            // avatar: {
+            //   secure_url: avatar?.secure_url,
+            //   public_id: avatar?.public_id,
+            // },
+            gender: gender.toUpperCase()
         });
         if (user) {
             return res.status(200).json({

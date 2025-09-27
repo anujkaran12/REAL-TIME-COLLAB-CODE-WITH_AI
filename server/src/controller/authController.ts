@@ -34,11 +34,11 @@ export const registerUser = async (req: Request, res: Response) => {
         type: "WARNING",
       });
     }
-    const avatar = await uploadCloudinary(
-      `https://avatar.iran.liara.run/public/${
-        gender.toUpperCase() === "MALE" ? "boy" : "girl"
-      }?username=${email.split("@")[0]}`
-    );
+    // const avatar = await uploadCloudinary(
+    //   `https://avatar.iran.liara.run/public/${
+    //     gender.toUpperCase() === "MALE" ? "boy" : "girl"
+    //   }?username=${email.split("@")[0]}`
+    // );
 
     // return;
     const hashPassword = await hashString(password.toString());
@@ -47,10 +47,11 @@ export const registerUser = async (req: Request, res: Response) => {
       name: name,
       email: email,
       password: hashPassword,
-      avatar: {
-        secure_url: avatar?.secure_url,
-        public_id: avatar?.public_id,
-      },
+      // avatar: {
+      //   secure_url: avatar?.secure_url,
+      //   public_id: avatar?.public_id,
+      // },
+      gender:gender.toUpperCase()
     });
 
     if (user) {
