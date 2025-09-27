@@ -6,14 +6,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useAppDispatch } from "../../hooks";
 import { fetchUser } from "../../redux/userSlice";
-
+import ReactAvatar from "react-avatar";
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(true);
   const { setOpenAuthFormType } = useAuth();
 
   const dispatch = useAppDispatch();
-  const location = useLocation()
+  const location = useLocation();
   // toggle dark mode on root
   useEffect(() => {
     if (darkMode) {
@@ -25,18 +25,18 @@ const Navbar: React.FC = () => {
 
   const { userData } = useSelector((state: RootState) => state.User);
 
-  useEffect(()=>{
-    if(!userData){
-      dispatch(fetchUser(""))
+  useEffect(() => {
+    if (!userData) {
+      dispatch(fetchUser(""));
     }
-  },[])
-const onLogout = ()=>{
-  localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN as string,'');
-  dispatch(fetchUser(""))
-}
-if(location.pathname === "/Room" || location.pathname === "/room"){
-  return<></>
-}
+  }, []);
+  const onLogout = () => {
+    localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN as string, "");
+    dispatch(fetchUser(""));
+  };
+  if (location.pathname === "/Room" || location.pathname === "/room") {
+    return <></>;
+  }
   return (
     <nav className="navbar">
       <div className="navbar-left" onClick={() => navigate("/")}>
@@ -46,25 +46,27 @@ if(location.pathname === "/Room" || location.pathname === "/room"){
       <div className="navbar-right">
         {userData ? (
           <>
-
-    
-               <button
+            <button
               className="auth-btn "
               onClick={() => navigate("/Dashboard")}
               title="Join or Create Room"
             >
               Join | Create Rooms
             </button>
-          {/* // User is logged in: show avatar + name */}
-          <div className="user-profile auth-btn" title="profile">
-            <img
-              src={userData?.avatar.secure_url || "/default-avatar.png"}
-              alt="User Avatar"
-              className="user-avatar"
-            />
-            <span className="user-name">Hi, {userData?.name}</span>
-          </div>
-           <button
+            {/* // User is logged in: show avatar + name */}
+            <div className="user-profile auth-btn" title="profile">
+              {userData?.avatar.secure_url ? (
+                <img
+                  src={userData?.avatar?.secure_url}
+                  alt="User Avatar"
+                  className="user-avatar"
+                />
+              ) : (
+                <ReactAvatar name={userData.name} size="100%" round={true} />
+              )}
+              <span className="user-name">Hi, {userData?.name}</span>
+            </div>
+            <button
               className="auth-btn "
               onClick={() => onLogout()}
               title="Join or Create Room"
