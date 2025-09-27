@@ -69,7 +69,7 @@ const Dashboard: React.FC = () => {
     }
 
     socket.on("participant-left", ({ msg, socketID, data, type }) => {
-      console.log(data);
+      
       setParticipantData(data.participants);
       showPopup(msg, type);
     });
@@ -81,10 +81,23 @@ const Dashboard: React.FC = () => {
       setRoomData({ roomTitle: "", roomPassword: "", hostSocketId: "" });
     });
 
+    socket.on("removed-from-room",({msg,type})=>{
+      
+      showPopup(msg, type);
+      setExistsRoom(false);
+      setParticipantData([]);
+      setRoomData({ roomTitle: "", roomPassword: "", hostSocketId: "" });
+    })
+
+    socket.on('participant-removed',({msg,type,data})=>{
+      
+      setParticipantData(data.participants)
+      showPopup(msg, type);
+    })
     socket.on("user-joined", ({ msg, type, data }) => {
       showPopup(msg, type);
       setParticipantData(data.participants);
-      console.log(data);
+      
     });
 
     socket.emit("join-room", { roomID, roomPassword, userData });
@@ -126,6 +139,8 @@ const Dashboard: React.FC = () => {
       socket.off("user-joined");
       socket.off("participant-left");
       socket.off("end-session");
+      socket.off("removed-from-room")
+      socket.off("participant-removed")
     };
   }, [socket, roomID, roomPassword, userData]);
 

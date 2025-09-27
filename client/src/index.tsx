@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { BrowserRouter } from "react-router-dom";
 import { SocketProvider } from "./context/socketContext";
+import { ConfigProvider } from "react-avatar";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,7 +20,9 @@ root.render(
       <Provider store={store}>
         <SocketProvider>
           <AuthProvider>
-            <App />
+            <ConfigProvider>
+              <App />
+            </ConfigProvider>
           </AuthProvider>
         </SocketProvider>
       </Provider>
