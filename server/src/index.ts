@@ -7,12 +7,12 @@ import { userRouter } from "./routes/userRouter";
 import { loginValidator } from "./utils/loginValidator";
 import { Server } from "socket.io";
 import http from "http";
-import { set } from "mongoose";
+
 //config env varibale for accessing
 dotenv.config();
 //connect to the mongoDB
 const app: Application = express();
-const PORT = parseInt(process.env.PORT as string);
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
