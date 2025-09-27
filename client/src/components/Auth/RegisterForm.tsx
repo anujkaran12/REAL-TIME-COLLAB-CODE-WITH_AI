@@ -56,14 +56,23 @@ const RegisterForm: React.FC = () => {
     }
 
     setLoading(true);
-    try {
+   try {
       const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/auth/send-verification-code`,
-        { email: formData.email }
+        `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`,
+        formData
       );
 
       showPopup(res.data.msg, res.data.type);
-      setVerificationCode(res.data.verificationCode)
+
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        gender: "",
+      });
+      
+      setOpenAuthFormType("LOGIN");
     } catch (error: any) {
       showPopup(
         error.response?.data.msg || "Network error",
@@ -107,10 +116,7 @@ const RegisterForm: React.FC = () => {
     setLoading(false);
   };
   return (
-    <>
-      {verificationCode ? (
-        <VerifyCode loading={loading} onVerifyCode={onVerifyCode} setVerificationCode={setVerificationCode}/>
-      ) : (
+  
         <div
           className="auth-form-container"
           onClick={(e) => e.stopPropagation()}
@@ -257,8 +263,7 @@ const RegisterForm: React.FC = () => {
             onClick={() => setOpenAuthFormType(null)}
           ></i>
         </div>
-      )}
-    </>
+      
   );
 };
 
