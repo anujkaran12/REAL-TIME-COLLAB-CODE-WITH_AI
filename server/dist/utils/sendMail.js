@@ -21,7 +21,7 @@ const transporter = nodemailer_1.default.createTransport({
     service: "gmail",
     auth: {
         user: "anujkaran420@gmail.com",
-        pass: "ovia lipk kmav ltgl", // App Password
+        pass: "ufip hcat udun xffd", // App Password
     },
 });
 const sendMail = (to, subject, html) => __awaiter(void 0, void 0, void 0, function* () {
