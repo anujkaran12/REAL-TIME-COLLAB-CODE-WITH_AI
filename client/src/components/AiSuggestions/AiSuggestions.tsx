@@ -51,9 +51,8 @@ ${sampleOutput}
 requestText += `
 
 Instructions:
-- Suggest what should be done next in the code to complete the task.
-- Give concise, step-by-step hints or ideas, not full code.
-- Do NOT rewrite the existing code.
+- Give concise, step-by-step hints or ideas, with code.
+- Rewrite the existing code.
 - Focus on logic and next steps only.
 - Keep the hints easy to follow and avoid markdown formatting like **bold** or \`\`\`.
 `;
