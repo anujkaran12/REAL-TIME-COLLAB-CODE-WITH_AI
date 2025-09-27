@@ -62,7 +62,9 @@ const Navbar: React.FC = () => {
                   className="user-avatar"
                 />
               ) : (
-                <ReactAvatar name={userData.name} size="100%" round={true} />
+                <div className="user-avatar">
+                  <ReactAvatar name={userData.name} size="100%" round={true} />
+                </div>
               )}
               <span className="user-name">Hi, {userData?.name}</span>
             </div>
