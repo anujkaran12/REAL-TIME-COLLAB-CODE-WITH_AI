@@ -12,13 +12,13 @@ import { set } from "mongoose";
 dotenv.config();
 //connect to the mongoDB
 const app: Application = express();
-const PORT = process.env.PORT;
+const PORT = parseInt(process.env.PORT as string);
 
 // Middleware
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000",process.env.FRONTEND_URL as string],
+    origin: ["http://localhost:3000", process.env.FRONTEND_URL as string],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
