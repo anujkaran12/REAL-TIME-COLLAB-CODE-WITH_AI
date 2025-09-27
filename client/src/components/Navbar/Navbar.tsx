@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useAppDispatch } from "../../hooks";
 import { fetchUser } from "../../redux/userSlice";
-import ReactAvatar from "react-avatar";
+// import ReactAvatar from "react-avatar";
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(true);
@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
             </button>
             {/* // User is logged in: show avatar + name */}
             <div className="user-profile auth-btn" title="profile">
-              {userData?.avatar.secure_url ? (
+              {/* {userData?.avatar.secure_url ? (
                 <img
                   src={userData?.avatar?.secure_url}
                   alt="User Avatar"
@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
                 <div className="user-avatar">
                   <ReactAvatar name={userData.name} size="100%" round={true} />
                 </div>
-              )}
+              )} */}
               <span className="user-name">Hi, {userData?.name}</span>
             </div>
             <button
