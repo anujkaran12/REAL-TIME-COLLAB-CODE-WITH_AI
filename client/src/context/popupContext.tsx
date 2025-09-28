@@ -38,7 +38,7 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({
       setTimeout(() => {
         setPopups((prev) => prev.filter((p) => p.id !== id));
       }, 400);
-    }, 10000);
+    }, 7000);
   };
 
   return (

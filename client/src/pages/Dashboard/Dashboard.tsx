@@ -21,6 +21,7 @@ import NotLoggedIn from "../../components/Utility/NotLoggedIn/NotLoggedIn";
 import { useSocket } from "../../context/socketContext";
 import SessionOver from "../../components/Utility/SessionOver/SessionOver";
 import RoomHeader from "../../components/RoomHeader/RoomHeader";
+import Chat from "../../Chat/Chat";
 
 const Dashboard: React.FC = () => {
   const { showPopup } = usePopup();
@@ -212,6 +213,7 @@ const Dashboard: React.FC = () => {
           <AISuggestions code={code} setCode={setCode} />
         </aside>
       </div>
+      <Chat/>
     </>
   );
 };

@@ -22,7 +22,7 @@
 .participants-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 1rem;
   justify-content: center;
 }
 
@@ -44,8 +44,7 @@
 
 .avatar {
   position: relative;
-  width: 100px;
-  height: 100px;
+ 
   border-radius: 50%;
   /* overflow: hidden; */
   background-color: var(--button-secondary-bg);
@@ -105,8 +104,7 @@
 
 @media (max-width: 768px) {
   .avatar {
-    width: 85px;
-    height: 85px;
+    
   }
   .mic-btn {
     font-size: 0.9rem;

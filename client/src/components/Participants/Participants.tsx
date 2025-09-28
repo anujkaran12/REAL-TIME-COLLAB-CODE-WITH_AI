@@ -39,7 +39,7 @@ const Participants: React.FC<Iprop> = ({ participantsData, hostSocketId }) => {
                   loading="lazy"
                 />
               ) : (
-                <ReactAvatar name={p.userData.name} round={true} />
+                <ReactAvatar name={p.userData.name} round={true} size="95"/>
               )}
               {hostSocketId === socket?.id && p.socketID !== socket?.id && (
                 <i
