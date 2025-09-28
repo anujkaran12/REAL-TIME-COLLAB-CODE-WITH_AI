@@ -205,6 +205,7 @@ io.on("connection", (socket) => {
       data: rooms.get(roomID),
     });
 
+
     // Confirm to the leaving participant
     socket.emit("left-room", {
       msg: `You have left the session "${room.roomTitle}`,
@@ -268,6 +269,28 @@ io.on("connection", (socket) => {
 
     socket.to(roomID).emit("code-update", { updatedCode, editorName });
   });
+  
+  /*************************************** Listining on send message *****************************************/
+  socket.on("send-msg",(roomID,msg)=>{
+     const room = rooms.get(roomID);
+
+    if (!room) {
+      socket.emit("join-room-error", {
+        msg: "Room does not exist",
+        type: "ERROR",
+      });
+      return;
+    }
+    socket.to(roomID).emit("receive-msg",msg);
+  })
+
+   socket.on("typing",({roomID,name})=>{
+    socket.to(roomID).emit("typing",name)
+   })
+
+
+
+
 
   /*************************************** Listining on disconnect *****************************************/
   socket.on("disconnect", (roomID) => {
