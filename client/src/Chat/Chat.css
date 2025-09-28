@@ -110,7 +110,7 @@
   padding: 8px 12px;
   border-radius: 16px;
   max-width: 70%;
-  font-size: 14px;
+  font-size: .8rem;
   line-height: 1.4;
   word-wrap: break-word;
   box-shadow: 0 1px 3px var(--shadow-color);
@@ -191,58 +191,25 @@
   }
 
   .chat-bubble {
-    font-size: 13px;
+    font-size: .9rem;
     padding: 6px 10px;
   }
-
   .chat-input input {
-    padding: 6px;
-    font-size: 13px;
-  }
+  
+  padding: 8px;
+  font-size: 1rem;
+}
 
-  .chat-input button {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
 }
 
 @media (max-width: 480px) {
   .chat-container {
     width: 90%;
-    height: 50%;
+    height: 60%;
     bottom: 60px;
     right: 5%;
   }
 
-  .chat-circle {
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
-  }
+  
 
-  .chat-bubble {
-    font-size: 12px;
-    padding: 5px 8px;
-    max-width: 75%;
-  }
-
-  .chat-input input {
-    padding: 5px;
-    font-size: 12px;
-  }
-
-  .chat-input button {
-    font-size: 11px;
-    padding: 5px 8px;
-  }
-
-  .chat-header {
-    font-size: 14px;
-    padding: 10px 12px;
-  }
-
-  .chat-typing {
-    font-size: 11px;
-    padding: 3px 6px;
-  }
 }

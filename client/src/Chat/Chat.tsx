@@ -122,7 +122,7 @@ const Chat: React.FC = () => {
                   {!isMe && (
                     <Avatar
                       name={msg.senderName}
-                      size="32"
+                      size="35"
                       round
                       className="chat-avatar"
                     />
@@ -133,9 +133,10 @@ const Chat: React.FC = () => {
                   {isMe && (
                     <Avatar
                       name="You"
-                      size="32"
+                      size="35"
                       round
                       className="chat-avatar"
+                      initials="you"
                     />
                   )}
                 </div>
